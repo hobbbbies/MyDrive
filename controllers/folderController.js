@@ -5,10 +5,10 @@ const fs = require("fs");
 
 async function folderPost (req, res) {
     try {
-        const { folderName } = req.body;
-        const folder = await prisma.folder.create({
+        const folder = JSON.parse(req.body.folder);
+        await prisma.folder.create({
         data: {
-            name: folderName
+            name: folder.name
         }
         });
 
@@ -16,8 +16,7 @@ async function folderPost (req, res) {
         if (!fs.existsSync(folderPath)) {
             fs.mkdirSync(folderPath, { recursive: true });
         }
-
-        res.json(folder);
+        res.redirect("upload")
   } catch (error) {
         res.status(500).json({ error: error.message });
   }
