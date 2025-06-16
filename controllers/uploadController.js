@@ -1,7 +1,9 @@
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
+const pathApi = require('path');
 
 async function uploadPost(req, res) {
+    console.log(req.body.folder);
     try{
         if (!req.file) {
             return res.status(400).send("No file uploaded!");
@@ -13,19 +15,27 @@ async function uploadPost(req, res) {
             path 
         } = req.file;
 
+        const extension = pathApi.extname(path);
+        const folder = JSON.parse(req.body.folder);
+
         const file = await prisma.file.create({
             data: {
                 name: originalname,
                 size: size,
+                extension: extension,
                 storagePath: path,
-                folderId: req.body.folder.id
+                folderId: folder.id
+            },
+            include: {
+                folder: true
             }
         });
-    } catch {
-
+        console.log(file);
+        res.redirect("/upload");
+    } catch(err) {
+        console.error("Error saving file:", err);
+        res.status(500).send(`Error uploading file: ${err.message}`);
     }
-    console.log(req.file);
-    res.redirect("/upload");
 }
 
 async function uploadGet(req, res) {

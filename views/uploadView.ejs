@@ -15,7 +15,7 @@
             <select name="folder" id="folder">
                 <option value="">-- Select a folder --</option>
                 <% folders.forEach(folder => { %>
-                    <option value="<%= folder %>"><%= folder.name %></option>
+                    <option value="<%= JSON.stringify(folder) %>"><%= folder.name %></option>
                 <% }); %>
             </select>
         </div>

@@ -32,6 +32,7 @@ model File {
   id          String   @id @default(uuid())
   name        String // Original filename
   size        Int // File size in bytes
+  extension   String? // File extension (.jpg, .pdf, etc)
   storagePath String // Path where file is stored on disk
   folder      Folder?  @relation(fields: [folderId], references: [id])
   folderId    String? // Reference to containing folder
