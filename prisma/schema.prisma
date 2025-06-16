@@ -13,3 +13,27 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
+
+model Folder {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  files     File[]
+}
+
+model File {
+  id          String   @id @default(uuid())
+  name        String // Original filename
+  size        Int // File size in bytes
+  storagePath String // Path where file is stored on disk
+  folder      Folder?  @relation(fields: [folderId], references: [id])
+  folderId    String? // Reference to containing folder
+  createdAt   DateTime @default(now())
+}
