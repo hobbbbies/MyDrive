@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3000;
 const { PrismaClient } = require('./generated/prisma');
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const prisma = new PrismaClient()
+const path = require('path');
 
 const indexRouter = require("./routes/indexRouter");
 const uploadRouter = require("./routes/uploadRouter");
@@ -16,6 +17,7 @@ require('./config/passport');
 require('dotenv').config();
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
     store: new PrismaSessionStore(

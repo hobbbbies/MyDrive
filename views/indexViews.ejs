@@ -3,10 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>My Drive</title>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <a href="/upload">Upload file</a>
+    <%- include('sidebar', { headerTitle: headerTitle, folders: folders || []}) %>
+    <main class="content">
+        <div class="content-header">
+            <%- include('header', { }) %>
+        </div>
+        
+        <div class="files-container">
+            <!-- File content will go here -->
+            <% if (files && files.length > 0) { %>
+                <% if (locals.chosenFolder) { %>
+                    
+                <% } %>
+                <div class="files-grid">
+                    <% files.forEach((file) => { %>
+                        <div class="file-item">
+                            <div class="file-icon">📄</div>
+                            <div class="file-name"><%= file.name %></div>
+                        </div>
+                    <% }); %>
+                    <%if (locals.nestedFolders){ %>
+                        <% nestedFolders.forEach((folder) => { %>
+                            <div class="file-item">
+                                <div class="file-icon">📂</div>
+                                <div class="file-name"><%= folder.name %></div>
+                            </div>
+                        <% })%>
+                    <% }%>
+                </div>
+            <% } else { %>
+                <div class="empty-state">
+                    <p>No files yet. Start by uploading a file!</p>
+                </div>
+            <% } %>
+        </div>
+    </main>
 </body>
 </html>

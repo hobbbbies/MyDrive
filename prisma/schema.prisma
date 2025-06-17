@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -22,19 +16,22 @@ model Session {
 }
 
 model Folder {
-  id        String   @id @default(uuid())
-  name      String
-  createdAt DateTime @default(now())
-  files     File[]
+  id         String   @id @default(uuid())
+  name       String
+  createdAt  DateTime @default(now())
+  files      File[]
+  parentId   String?
+  parent     Folder?  @relation("NestedFolders", fields: [parentId], references: [id])
+  subfolders Folder[] @relation("NestedFolders")
 }
 
 model File {
   id          String   @id @default(uuid())
-  name        String // Original filename
-  size        Int // File size in bytes
-  extension   String? // File extension (.jpg, .pdf, etc)
-  storagePath String // Path where file is stored on disk
-  folder      Folder?  @relation(fields: [folderId], references: [id])
-  folderId    String? // Reference to containing folder
+  name        String
+  size        Int
+  extension   String?
+  storagePath String
+  folderId    String?
   createdAt   DateTime @default(now())
+  folder      Folder?  @relation(fields: [folderId], references: [id])
 }
